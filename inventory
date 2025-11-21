@@ -4,4 +4,4 @@
 
 [remote_servers]
 #192.168.1.4 ansible_host=192.168.1.4
-3.238.147.90 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/ali.pem
+13.220.1.107 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/ali.pem

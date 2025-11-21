@@ -8,9 +8,9 @@
     - role: Install-Jenkins
       tags: jenkins
 
-- name: Deploy weather app stack
-  hosts: remote_servers  
-  gather_facts: true
-  roles:
-    - role: run-weatherapp 
-      tags: weather
+#- name: Deploy weather app stack
+#  hosts: remote_servers  
+#  gather_facts: true
+#  roles:
+#    - role: run-weatherapp 
+#      tags: weather

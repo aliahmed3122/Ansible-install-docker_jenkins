@@ -18,47 +18,24 @@
      - curl
   when: ansible_facts['distribution'] == "Ubuntu"
 
-- name: Create directory for keyrings
-  ansible.builtin.file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: '0755'
+- name: Install Docker using official script
+  ansible.builtin.shell: curl -fsSL https://get.docker.com | sh
   become: yes
   when: ansible_facts['distribution'] == "Ubuntu"
 
-- name: Add Docker GPG key
-  ansible.builtin.get_url:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    dest: /etc/apt/keyrings/docker.asc
-    mode: '0644'
+- name: Install Docker Compose plugin
+  ansible.builtin.shell: |
+    mkdir -p /usr/libexec/docker/cli-plugins/
+    curl -SL https://github.com/docker/compose/releases/download/v2.23.1/docker-compose-linux-x86_64 -o /usr/libexec/docker/cli-plugins/docker-compose
+    chmod +x /usr/libexec/docker/cli-plugins/docker-compose
   become: yes
   when: ansible_facts['distribution'] == "Ubuntu"
 
-- name: Add Docker repository
-  ansible.builtin.apt_repository:
-    repo: "deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_facts['lsb']['codename'] }} stable"
-    state: present
-    filename: docker
-  become: yes
-  when: ansible_facts['distribution'] == "Ubuntu"
-
-- name: Update cache
-  ansible.builtin.apt:
-    update_cache: yes
-  become: yes
-  when: ansible_facts['distribution'] == "Ubuntu"
-
-
-- name: Install docker on Ubuntu
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: present
-  loop:
-     - docker-ce
-     - docker-ce-cli
-     - containerd.io
-     - docker-buildx-plugin
-     - docker-compose-plugin
+- name: Start and enable docker service
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
   when: ansible_facts['distribution'] == "Ubuntu"
 
 
